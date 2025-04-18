@@ -1,15 +1,17 @@
 import streamlit as st
 import os
-from dotenv import load_dotenv
 import google.generativeai as genai
 import random
 
-load_dotenv()
+GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY")
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
-    st.error("Bruh, set your GOOGLE_API_KEY in the .env file ASAP!")
-    st.stop()
+    from dotenv import load_dotenv
+    load_dotenv()
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+    if not GOOGLE_API_KEY:
+        st.error("Bruh, set your GOOGLE_API_KEY in the .env file ASAP! (for local testing)")
+        st.stop()
 
 genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel("gemini-2.0-flash")
